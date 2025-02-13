@@ -14,8 +14,7 @@ const questions = [
   { question: "IN MINECRAFT, WHAT SOUND DOES A CREEPER MAKE BEFORE EXPLODING?", answer: "Hiss" },
 ]
 
-const revealImageUrl =
-  "https://v8vc76fisea2a9it.public.blob.vercel-storage.com/doom-xQ0IcoEU5QqCQ2WKkqu2eqGC3JLDo8.webp"
+const revealImageUrl = "/fall-back.png" // Fallback image in public folder
 
 export default function ImageRevealQuiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
