@@ -10,8 +10,8 @@ const pressStart2P = Press_Start_2P({
 })
 
 export const metadata: Metadata = {
-  title: "Image Quest",
-  description: "A retro-style gaming quiz that reveals an image as you answer correctly",
+  title: "Gaming Faction Quest",
+  description: "A retro-style gaming quiz",
 }
 
 export default function RootLayout({
