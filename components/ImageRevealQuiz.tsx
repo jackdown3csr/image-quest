@@ -14,9 +14,9 @@ const questions = [
   { question: "IN MINECRAFT, WHAT SOUND DOES A CREEPER MAKE BEFORE EXPLODING?", answer: "Hiss" },
 ]
 
+const defaultBackgroundImage = "/fallback-image.png" // Default background image in public folder
 const revealImageUrl =
   "https://v8vc76fisea2a9it.public.blob.vercel-storage.com/doom-xQ0IcoEU5QqCQ2WKkqu2eqGC3JLDo8.webp"
-const fallbackImageUrl = "/fallback-image.png" // Fallback image in public folder
 
 export default function ImageRevealQuiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -101,10 +101,14 @@ export default function ImageRevealQuiz() {
         className="relative w-full mb-4 bg-black overflow-hidden border-2 border-green-500 shadow-lg shadow-green-500/20"
         style={{ height: "200px" }}
       >
-        {isQuizCompleted ? (
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${defaultBackgroundImage})` }}
+        ></div>
+        {isQuizCompleted && (
           <div className="relative w-full h-full cursor-pointer group" onClick={handleImageClick}>
             <Image
-              src={imageError ? fallbackImageUrl : revealImageUrl}
+              src={imageError ? defaultBackgroundImage : revealImageUrl}
               alt="Revealed image"
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -144,8 +148,9 @@ export default function ImageRevealQuiz() {
               </motion.div>
             )}
           </div>
-        ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
+        )}
+        {!isQuizCompleted && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-70">
             <div className="w-3/4 h-4 bg-gray-800 overflow-hidden mb-2 border border-green-500">
               <motion.div
                 className="h-full bg-green-500 relative"
