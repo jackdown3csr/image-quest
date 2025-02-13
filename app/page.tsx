@@ -53,7 +53,7 @@ export default function Home() {
 
         <div className="relative z-10">
           <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center relative mb-4 sm:mb-8 neon-text">
-            Retro Gaming Trivia
+            Gaming Trivia
           </h1>
           <ImageRevealQuiz />
         </div>
