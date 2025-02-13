@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { ChevronRight } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -14,7 +14,6 @@ const questions = [
   { question: "IN MINECRAFT, WHAT SOUND DOES A CREEPER MAKE BEFORE EXPLODING?", answer: "Hiss" },
 ]
 
-const defaultBackgroundImage = "/fallback-image.png" // Default background image in public folder
 const revealImageUrl =
   "https://v8vc76fisea2a9it.public.blob.vercel-storage.com/doom-xQ0IcoEU5QqCQ2WKkqu2eqGC3JLDo8.webp"
 
@@ -26,7 +25,6 @@ export default function ImageRevealQuiz() {
   const [showLink, setShowLink] = useState(false)
   const [isIncorrect, setIsIncorrect] = useState(false)
   const [showFeedback, setShowFeedback] = useState(false)
-  const [imageError, setImageError] = useState(false)
 
   useEffect(() => {
     if (correctAnswers === questions.length) {
@@ -56,7 +54,6 @@ export default function ImageRevealQuiz() {
       setIsIncorrect(false)
     } else {
       setIsIncorrect(true)
-      setTimeout(() => setIsIncorrect(false), 1000)
     }
     setUserAnswer("")
   }
@@ -68,11 +65,6 @@ export default function ImageRevealQuiz() {
   }
 
   const loadingProgress = (correctAnswers / questions.length) * 100
-
-  const handleImageError = useCallback(() => {
-    console.error("Error loading image:", revealImageUrl)
-    setImageError(true)
-  }, [])
 
   return (
     <motion.div
@@ -101,18 +93,13 @@ export default function ImageRevealQuiz() {
         className="relative w-full mb-4 bg-black overflow-hidden border-2 border-green-500 shadow-lg shadow-green-500/20"
         style={{ height: "200px" }}
       >
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${defaultBackgroundImage})` }}
-        ></div>
-        {isQuizCompleted && (
+        {isQuizCompleted ? (
           <div className="relative w-full h-full cursor-pointer group" onClick={handleImageClick}>
             <Image
-              src={imageError ? defaultBackgroundImage : revealImageUrl}
+              src={revealImageUrl || "/placeholder.svg"}
               alt="Revealed image"
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
-              onError={handleImageError}
             />
             <AnimatePresence>
               {showLink && (
@@ -148,9 +135,8 @@ export default function ImageRevealQuiz() {
               </motion.div>
             )}
           </div>
-        )}
-        {!isQuizCompleted && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-70">
+        ) : (
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
             <div className="w-3/4 h-4 bg-gray-800 overflow-hidden mb-2 border border-green-500">
               <motion.div
                 className="h-full bg-green-500 relative"
@@ -203,38 +189,31 @@ export default function ImageRevealQuiz() {
       {!isQuizCompleted && (
         <motion.form
           onSubmit={handleSubmit}
-          className={`relative z-10 w-full px-2`}
+          className={`relative z-10 ${isIncorrect ? "shake" : ""} w-full px-2`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.5 }}
         >
-          <motion.div animate={isIncorrect ? { x: [-10, 10, -10, 10, 0] } : {}} transition={{ duration: 0.4 }}>
-            <div className="flex space-x-2 w-full relative">
-              <input
-                type="text"
-                value={userAnswer}
-                onChange={(e) => setUserAnswer(e.target.value)}
-                className={`flex-grow p-2 border-2 ${
-                  isIncorrect ? "border-red-500 bg-red-900 bg-opacity-20" : "border-green-500"
-                } rounded-none bg-black text-green-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:shadow-[0_0_10px_rgba(0,255,0,0.5)] text-xs sm:text-sm md:text-base uppercase transition-all duration-300`}
-                placeholder="YOUR ANSWER"
-                required
-              />
-              {isIncorrect && (
-                <div className="absolute right-12 top-1/2 transform -translate-y-1/2">
-                  <span className="text-red-500 text-xl animate-pulse">✗</span>
-                </div>
-              )}
-              <motion.button
-                type="submit"
-                className="p-2 bg-green-500 text-black rounded-none hover:bg-green-400 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 flex-shrink-0"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <ChevronRight size={16} className="sm:w-5 sm:h-5 md:w-6 md:h-6" />
-              </motion.button>
-            </div>
-          </motion.div>
+          <div className="flex space-x-2 w-full">
+            <input
+              type="text"
+              value={userAnswer}
+              onChange={(e) => setUserAnswer(e.target.value)}
+              className={`flex-grow p-2 border-2 ${
+                isIncorrect ? "border-red-500" : "border-green-500"
+              } rounded-none bg-black text-green-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:shadow-[0_0_10px_rgba(0,255,0,0.5)] text-xs sm:text-sm md:text-base uppercase transition-all duration-300`}
+              placeholder="YOUR ANSWER"
+              required
+            />
+            <motion.button
+              type="submit"
+              className="p-2 bg-green-500 text-black rounded-none hover:bg-green-400 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 flex-shrink-0"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <ChevronRight size={16} className="sm:w-5 sm:h-5 md:w-6 md:h-6" />
+            </motion.button>
+          </div>
         </motion.form>
       )}
       <AnimatePresence>
