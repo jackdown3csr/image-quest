@@ -1,101 +1,69 @@
-import Image from "next/image";
+import ImageRevealQuiz from "../components/ImageRevealQuiz"
+import { Press_Start_2P } from "next/font/google"
+
+const pressStart2P = Press_Start_2P({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+})
+
+const backgroundImageUrl =
+  "https://v8vc76fisea2a9it.public.blob.vercel-storage.com/jackdown3csr_webpage_background_pc_gaming_abstract_theme_dimm_f44ea663-2023-4ab9-bb96-1c685a4aa2a6_1-OLEfhIMQjQSck6mSdexF8FyScgdA0H.png"
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <main
+      className={`flex min-h-screen flex-col items-center justify-center p-2 sm:p-4 ${pressStart2P.className}`}
+      style={{
+        backgroundImage: `url(${backgroundImageUrl})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <div className="w-full max-w-[940px] bg-black bg-opacity-80 p-4 sm:p-6 md:p-8 rounded-lg shadow-2xl border-4 sm:border-8 border-green-900 relative overflow-hidden">
+        {/* CRT screen effect */}
+        <div
+          className="absolute inset-0 pointer-events-none rounded-lg"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(0,255,0,0.15) 0%, rgba(0,0,0,0.15) 100%), radial-gradient(at center, rgba(0,255,0,0.4) 0%, rgba(0,0,0,0.4) 100%)",
+            backgroundBlendMode: "multiply",
+            mixBlendMode: "overlay",
+          }}
+        ></div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        {/* Scanlines effect */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "repeating-linear-gradient(0deg, rgba(0,255,0,0.03), rgba(0,255,0,0.03) 1px, transparent 1px, transparent 2px)",
+            backgroundSize: "100% 2px",
+          }}
+        ></div>
+
+        {/* Screen glare effect */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-20"
+          style={{
+            background: "linear-gradient(120deg, transparent 0%, rgba(0,255,0,0.3) 50%, transparent 100%)",
+          }}
+        ></div>
+
+        <div className="relative z-10">
+          <div className="flex justify-between items-center mb-6">
+            <div className="w-3 h-3 rounded-full bg-red-500 shadow-glow-red"></div>
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-center relative">
+              <span className="absolute inset-0 blur-sm text-green-700 text-shadow-green">IMAGE QUEST</span>
+              <span className="relative text-green-600 text-shadow-green-strong">IMAGE QUEST</span>
+            </h1>
+            <div className="w-3 h-3 rounded-full bg-green-500 shadow-glow-green"></div>
+          </div>
+          <ImageRevealQuiz />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+      </div>
+    </main>
+  )
 }
+
