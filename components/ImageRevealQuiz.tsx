@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import Image from "next/image"
 import { ChevronRight } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -16,6 +16,7 @@ const questions = [
 
 const revealImageUrl =
   "https://v8vc76fisea2a9it.public.blob.vercel-storage.com/doom-xQ0IcoEU5QqCQ2WKkqu2eqGC3JLDo8.webp"
+const fallbackImageUrl = "/fallback-image.png" // Fallback image in public folder
 
 export default function ImageRevealQuiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -25,6 +26,7 @@ export default function ImageRevealQuiz() {
   const [showLink, setShowLink] = useState(false)
   const [isIncorrect, setIsIncorrect] = useState(false)
   const [showFeedback, setShowFeedback] = useState(false)
+  const [imageError, setImageError] = useState(false)
 
   useEffect(() => {
     if (correctAnswers === questions.length) {
@@ -67,6 +69,11 @@ export default function ImageRevealQuiz() {
 
   const loadingProgress = (correctAnswers / questions.length) * 100
 
+  const handleImageError = useCallback(() => {
+    console.error("Error loading image:", revealImageUrl)
+    setImageError(true)
+  }, [])
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -97,10 +104,11 @@ export default function ImageRevealQuiz() {
         {isQuizCompleted ? (
           <div className="relative w-full h-full cursor-pointer group" onClick={handleImageClick}>
             <Image
-              src={revealImageUrl || "/placeholder.svg"}
+              src={imageError ? fallbackImageUrl : revealImageUrl}
               alt="Revealed image"
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
+              onError={handleImageError}
             />
             <AnimatePresence>
               {showLink && (
