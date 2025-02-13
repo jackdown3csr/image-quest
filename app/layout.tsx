@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   keywords: "gaming, quiz, trivia, video games, nostalgia",
   openGraph: {
     title: "Gaming Trivia",
-    description: "Challenge your gaming knowledge and uncover hidden pixel art!",
+    description: "Test your gaming knowledge",
     images: [
       {
         url: "/og-image.png",
