@@ -13,15 +13,19 @@ const backgroundImageUrl =
 export default function Home() {
   return (
     <main
-      className={`flex min-h-screen flex-col items-center justify-center p-2 sm:p-4 ${pressStart2P.className}`}
+      className={`flex min-h-screen flex-col items-center justify-center p-2 sm:p-4 ${pressStart2P.className} relative z-10`}
       style={{
-        backgroundImage: `url(${backgroundImageUrl})`,
+        backgroundImage: `
+          linear-gradient(to bottom, rgba(0, 255, 0, 0.05), rgba(0, 0, 0, 0.3)),
+          url(${backgroundImageUrl})
+        `,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="w-full max-w-[940px] bg-black bg-opacity-80 p-4 sm:p-6 md:p-8 rounded-lg shadow-2xl border-4 sm:border-8 border-green-900 relative overflow-hidden">
+      <div className="absolute inset-0 bg-black opacity-30 z-0 animate-pulse"></div>
+      <div className="w-full max-w-[940px] bg-black bg-opacity-80 p-4 sm:p-6 md:p-8 rounded-lg shadow-2xl border-4 sm:border-8 border-green-900 relative overflow-hidden z-10">
         {/* CRT screen effect */}
         <div
           className="absolute inset-0 pointer-events-none rounded-lg"

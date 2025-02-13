@@ -24,6 +24,7 @@ export default function ImageRevealQuiz() {
   const [isQuizCompleted, setIsQuizCompleted] = useState(false)
   const [showLink, setShowLink] = useState(false)
   const [isIncorrect, setIsIncorrect] = useState(false)
+  const [showFeedback, setShowFeedback] = useState(false)
 
   useEffect(() => {
     if (correctAnswers === questions.length) {
@@ -43,12 +44,17 @@ export default function ImageRevealQuiz() {
     e.preventDefault()
     if (userAnswer.toLowerCase() === questions[currentQuestion].answer.toLowerCase()) {
       setCorrectAnswers((prev) => prev + 1)
-      if (currentQuestion < questions.length - 1) {
-        setCurrentQuestion((prev) => prev + 1)
-      }
+      setShowFeedback(true)
+      setTimeout(() => {
+        setShowFeedback(false)
+        if (currentQuestion < questions.length - 1) {
+          setCurrentQuestion((prev) => prev + 1)
+        }
+      }, 1500)
       setIsIncorrect(false)
     } else {
       setIsIncorrect(true)
+      setTimeout(() => setIsIncorrect(false), 1000)
     }
     setUserAnswer("")
   }
@@ -62,7 +68,10 @@ export default function ImageRevealQuiz() {
   const loadingProgress = (correctAnswers / questions.length) * 100
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
       className="w-full max-w-[900px] mx-auto bg-black bg-opacity-80 p-4 rounded-lg shadow-inner flex flex-col relative overflow-hidden"
       style={{ height: "480px" }}
     >
@@ -87,7 +96,12 @@ export default function ImageRevealQuiz() {
       >
         {isQuizCompleted ? (
           <div className="relative w-full h-full cursor-pointer group" onClick={handleImageClick}>
-            <Image src={revealImageUrl || "/placeholder.svg"} alt="Revealed image" fill className="object-cover" />
+            <Image
+              src={revealImageUrl || "/placeholder.svg"}
+              alt="Revealed image"
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+            />
             <AnimatePresence>
               {showLink && (
                 <motion.div
@@ -125,12 +139,14 @@ export default function ImageRevealQuiz() {
         ) : (
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <div className="w-3/4 h-4 bg-gray-800 overflow-hidden mb-2 border border-green-500">
-              <div
-                className="h-full bg-green-500 transition-all duration-500 ease-out relative"
-                style={{ width: `${loadingProgress}%` }}
+              <motion.div
+                className="h-full bg-green-500 relative"
+                initial={{ width: 0 }}
+                animate={{ width: `${loadingProgress}%` }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
               >
                 <div className="absolute inset-0 loading-bar-progress"></div>
-              </div>
+              </motion.div>
             </div>
             <p className="text-green-500 text-xs sm:text-sm md:text-base">
               LOADING: {Math.round(loadingProgress)}%
@@ -140,46 +156,90 @@ export default function ImageRevealQuiz() {
         )}
       </div>
 
-      <div className="flex-grow overflow-y-auto scrollbar-hide relative z-10 mb-4" style={{ height: "160px" }}>
+      <div className="flex-grow overflow-y-auto scrollbar-hide relative z-10 mb-4 px-2" style={{ height: "160px" }}>
         {!isQuizCompleted ? (
-          <div className="space-y-3">
+          <motion.div
+            key={currentQuestion}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="space-y-3"
+          >
             <h2 className="text-xs sm:text-sm md:text-base font-semibold text-green-500 leading-relaxed">
               {questions[currentQuestion].question}
             </h2>
-          </div>
+          </motion.div>
         ) : (
-          <div className="text-center text-green-500">
-            <h2 className="text-sm sm:text-base md:text-lg font-bold mb-2">CONGRATULATIONS!</h2>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center text-green-500"
+          >
+            <h2 className="text-sm sm:text-base md:text-lg font-bold mb-2 glitch" data-text="CONGRATULATIONS!">
+              CONGRATULATIONS!
+            </h2>
             <p className="text-xs sm:text-sm md:text-base">
               {showLink ? "YOUR LINK IS READY..." : "CLICK THE IMAGE TO CONTINUE"}
             </p>
-          </div>
+          </motion.div>
         )}
       </div>
 
       {!isQuizCompleted && (
-        <form onSubmit={handleSubmit} className={`relative z-10 ${isIncorrect ? "shake" : ""}`}>
-          <div className="flex space-x-2">
-            <input
-              type="text"
-              value={userAnswer}
-              onChange={(e) => setUserAnswer(e.target.value)}
-              className={`flex-grow p-2 border-2 ${
-                isIncorrect ? "border-red-500" : "border-green-500"
-              } rounded-none bg-black text-green-500 focus:outline-none focus:ring-2 focus:ring-green-500 text-xs sm:text-sm md:text-base uppercase`}
-              placeholder="YOUR ANSWER"
-              required
-            />
-            <button
-              type="submit"
-              className="p-2 bg-green-500 text-black rounded-none hover:bg-green-400 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
-            >
-              <ChevronRight size={16} className="sm:w-5 sm:h-5 md:w-6 md:h-6" />
-            </button>
-          </div>
-        </form>
+        <motion.form
+          onSubmit={handleSubmit}
+          className={`relative z-10 w-full px-2`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+        >
+          <motion.div animate={isIncorrect ? { x: [-10, 10, -10, 10, 0] } : {}} transition={{ duration: 0.4 }}>
+            <div className="flex space-x-2 w-full relative">
+              <input
+                type="text"
+                value={userAnswer}
+                onChange={(e) => setUserAnswer(e.target.value)}
+                className={`flex-grow p-2 border-2 ${
+                  isIncorrect ? "border-red-500 bg-red-900 bg-opacity-20" : "border-green-500"
+                } rounded-none bg-black text-green-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:shadow-[0_0_10px_rgba(0,255,0,0.5)] text-xs sm:text-sm md:text-base uppercase transition-all duration-300`}
+                placeholder="YOUR ANSWER"
+                required
+              />
+              {isIncorrect && (
+                <div className="absolute right-12 top-1/2 transform -translate-y-1/2">
+                  <span className="text-red-500 text-xl animate-pulse">✗</span>
+                </div>
+              )}
+              <motion.button
+                type="submit"
+                className="p-2 bg-green-500 text-black rounded-none hover:bg-green-400 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 flex-shrink-0"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <ChevronRight size={16} className="sm:w-5 sm:h-5 md:w-6 md:h-6" />
+              </motion.button>
+            </div>
+          </motion.div>
+        </motion.form>
       )}
-    </div>
+      <AnimatePresence>
+        {showFeedback && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="absolute bottom-16 left-0 right-0 text-center"
+          >
+            <span className="inline-block px-4 py-2 text-green-500 text-sm font-bold border-2 border-green-500 bg-black shadow-[0_0_10px_rgba(0,255,0,0.5)] animate-pulse">
+              CORRECT!
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   )
 }
 
