@@ -11,26 +11,26 @@ const pressStart2P = Press_Start_2P({
 
 export const metadata: Metadata = {
   metadataBase: new URL("http://localhost:3000"),
-  title: "Retro Gaming Trivia",
+  title: "Gaming Trivia",
   description:
     "Test your knowledge of classic video games in this retro-styled quiz that reveals a hidden image as you progress.",
-  keywords: "retro gaming, quiz, trivia, video games, nostalgia",
+  keywords: "gaming, quiz, trivia, video games, nostalgia",
   openGraph: {
-    title: "Retro Gaming Trivia",
-    description: "Challenge your retro gaming knowledge and uncover hidden pixel art!",
+    title: "Gaming Trivia",
+    description: "Challenge your gaming knowledge and uncover hidden pixel art!",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Retro Gaming Trivia",
+        alt: "Gaming Trivia",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Retro Gaming Trivia",
-    description: "Challenge your retro gaming knowledge and uncover hidden pixel art!",
+    title: "Gaming Trivia",
+    description: "Challenge your gaming knowledge and uncover hidden pixel art!",
     images: ["/og-image.png"],
   },
 }
